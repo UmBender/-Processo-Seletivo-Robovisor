@@ -1,15 +1,15 @@
 # Prova de conceito
-Aqui está o presento projeto implementado em python da prova de conceito
-proposta no desavio seletivo.
-Para implementação seguindo as demandas das requisições definidas
-são criadas duas estâncias, uma que irá salvar em um arquivo o texto
-que será recebido atráves dos post recebidos pelo client subscriber.
-E outra estância irá o executar o festival.
-
+Aqui está o projeto implementado em Python para a prova de conceito proposta no desafio seletivo. 
+Para atender às demandas das especificações definidas, foram criados dois processos.
+Um deles é responsável por salvar em um arquivo o texto recebido através dos posts enviados pelo cliente assinante. 
+O outro processo instanciado será responsável por executar o festival.
 O diagrama da arquitetura do projeto.
+
+
+## Diagrama
 ![alt text](./Diagrama.png)
 
-O projeto utilizou paho-mqtt e asyncio para realização do projeto.
-
-O projeto foi configurado via hardcode, pois se trata de uma prova de conceito.
+## Especificações
+No projeto foi utilizado as bibliotecas paho-mqtt e asyncio.
+O projeto foi configurado hardcode, pois se trata de uma prova de conceito.
 A porta utilizada será a 1883, e os post serão no tópico test/status.
