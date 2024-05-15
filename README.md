@@ -1,8 +1,8 @@
 # Prova de conceito
 Aqui está o projeto implementado em Python para a prova de conceito proposta no desafio seletivo. 
-Para atender às demandas das especificações definidas, foram criados dois processos.
-Um deles é responsável por salvar em um arquivo o texto recebido através dos posts enviados pelo cliente assinante. 
-O outro processo instanciado será responsável por executar o festival.
+Para atender às demandas das especificações definidas, foi criado apenas um processo.
+Ele é responsável por salvar os posts recebidos em uma fila. 
+E outra thread instanciada será responsável por executar o festival.
 O diagrama da arquitetura do projeto.
 
 
