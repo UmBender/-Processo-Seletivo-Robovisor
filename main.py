@@ -32,7 +32,7 @@ class MQTTSubscriber:
 async def consumer():
     while True:
         token = await queue.get()
-        print("Here")
+        print(queue)
         format = f"echo \'{token}\' >> .temp"
         os.system(format)
         festival_command = "festival --tts .temp"
