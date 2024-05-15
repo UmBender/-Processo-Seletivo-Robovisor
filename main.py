@@ -1,5 +1,8 @@
+import asyncio
 import os
 import paho.mqtt.client as mqtt
+
+queue = asyncio.Queue()
 
 
 class MQTTSubscriber:
@@ -16,23 +19,47 @@ class MQTTSubscriber:
 
     def on_message(self, client, userdata, msg):
         payload = msg.payload.decode()
-        os.system(f"echo {payload} >> cache")
+        queue.put_nowait(payload)
 
-    def start(self):
-        self.client.connect(self.host, self.port, 60)
-        self.client.loop_forever()
+    async def start(self):
+        while True:
+            self.client.connect(self.host, self.port, 60)
+            self.client.loop_start()
+            await asyncio.sleep(0.5)
+            self.client.loop_stop()
 
 
-def main():
+async def consumer():
+    while True:
+        token = await queue.get()
+        print("Here")
+        format = f"echo \'{token}\' >> .temp"
+        os.system(format)
+        festival_command = "festival --tts .temp"
+        process = await asyncio.create_subprocess_shell(
+            festival_command,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+        )
+        await process.communicate()
+        os.system("rm .temp")
+        queue.task_done()
+
+
+async def main():
     print("UP MQTT")
     mqtt_host = "localhost"
     mqtt_port = 1883
     mqtt_topic = "test/status"
 
-    mqtt_subscriber = MQTTSubscriber(mqtt_host, mqtt_port, mqtt_topic)
+    sub = MQTTSubscriber(mqtt_host, mqtt_port, mqtt_topic)
 
-    mqtt_subscriber.start()
+    consumers = [asyncio.create_task(consumer()) for _ in range(1)]
+    producers = [asyncio.create_task(sub.start()) for _ in range(1)]
+
+    await asyncio.gather(*consumers)
+    await asyncio.gather(*producers)
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
